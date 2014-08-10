@@ -6,8 +6,13 @@ cli   = require './cli'
 watch = require './watch'
 
 
-options = cli.parseArgs()
-subproc = null # will hold the ChildProcess object
+options = null # will hold a command-line options object
+subproc = null # will hold a ChildProcess object
+
+
+debug = (message) ->
+  # These messages are picked up by the test suite
+  console.log message if process.env.DEBUG is 'true'
 
 
 spawn = ->
@@ -18,8 +23,13 @@ spawn = ->
     cwd  : process.cwd()
     stdio: 'inherit'
 
+  debug "SPAWN"
+
   subproc.on 'exit', (status, signal) ->
+    debug "EXIT"
+
     subproc = null
+
 
 
 respawn = ->
@@ -28,18 +38,23 @@ respawn = ->
 
   else
     if options.kill
+      debug "TERM"
       subproc.kill()
 
     if options.Kill
+      debug "KILL"
       subproc.kill 'SIGKILL'
 
     if options.parallel
       spawn()
     else
+      debug "WAIT"
       subproc.on 'exit', spawn
 
 
-@main = ->
+@main = (argv) ->
+  options = cli.parse argv
+
   for path in options.watches
     try
       watch.watch path, respawn

@@ -54,9 +54,9 @@ yargs.showHelp (help) ->
 # 1. Not be a flag (begin with '-')
 # 2. Not be after a flag that takes a parameter (maybe with flag grouping)
 
-is_flag_or_parameter = (args, i) ->
-  arg  = args[i]
-  prev = args[i - 1]
+is_flag_or_parameter = (argv, i) ->
+  arg  = argv[i]
+  prev = argv[i - 1]
 
   if arg[0] is '-'
     return true
@@ -67,22 +67,22 @@ is_flag_or_parameter = (args, i) ->
   return prev is '--watch' or prev[1] isnt '-' and 'w' in prev
 
 
-splitArgs = (args) ->
+splitArgs = (argv) ->
   # Find first non-flag, non-flag-parameter argument and split args in two
 
-  for arg, i in args
-    if not is_flag_or_parameter args, i
-      return [ args[...i], args[i..] ]
+  for arg, i in argv
+    if not is_flag_or_parameter argv, i
+      return [ argv[...i], argv[i..] ]
 
-  [ args, [] ]
+  [ argv, [] ]
 
 
-ensureArray = (object) ->
-  if Array.isArray object then object else [object]
+ensureArray = (obj_or_array) ->
+  if Array.isArray obj_or_array then obj_or_array else [obj_or_array]
   
 
-@parseArgs = ->
-  [flags, command] = splitArgs process.argv.slice 2
+@parse = (argv) ->
+  [flags, command] = splitArgs argv[2..]
 
   if not command.length
     console.error "No command given\n"
