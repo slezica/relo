@@ -1,32 +1,19 @@
-# watch.coffee
-
-# This module implements file-system watching, wrapping fs.watch() to provide
-# event grouping: near-simultaneous events are reported in bulk.
-
-# For now, the implementation is pretty basic: a 1 second timer reports events
-# if there were any. The downside of this simplicity is that event groups are
-# interrupted every time the timer ticks, which may be mere milliseconds after
-# the first event in the chain.
-
-fs = require 'fs'
+chokidar = require 'chokidar'
 
 
-REPORT_INTERVAL = 1000 # milliseconds
+CALLBACK_INTERVAL = 1000 # milliseconds
 
 
 @watch = (path, callback) ->
-  events_since_last_report = []
+  events  = [] # accumulated events since last callback
+  watcher = chokidar.watch path, ignoreInitial: true
 
-  report = ->
-    if events_since_last_report.length is 0
-      return
+  watcher.on 'all', (event, filename) ->
+    events.push {event, filename}
 
-    callback events_since_last_report
-    events_since_last_report = []
+  setInterval (->
+    if events.length > 0
+      callback events
+      events = []
 
-
-  fs.watch path, (event, filename) ->
-    events_since_last_report.push {event, filename}
-
-
-  setInterval report, REPORT_INTERVAL
+  ), CALLBACK_INTERVAL
