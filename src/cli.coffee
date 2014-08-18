@@ -3,13 +3,13 @@ fs = require 'fs'
 
 yargs = require 'yargs'
   .usage "
-    redo [-k] [-p] [-w file|dir]+ <command...>
+    redo [-w file|dir]+ [-k] [-p] -- <command>+\n
     Rerun command on file-system events
   "
 
-  .example "$0 -w file make", "Rerun make"
-  .example "$0 -w dir/ -k runserver", "Kill and restart server"
-  .example "$0 -w file -w dir/ ...", "Multiple watches"
+  .example "$0 -w file -- make all", "Rerun make"
+  .example "$0 -w dir/ -k -- runserver", "Kill and restart server"
+  .example "$0 -w file -w dir/ -- cmd", "Multiple watches"
 
   .help  'help'
   .alias 'help', 'h'
@@ -37,8 +37,9 @@ yargs = require 'yargs'
     describe: "Redo command immediately, in parallel (waits by default)"
     boolean : true
 
-  .wrap 80
   .strict() # no unknown flags accepted
+  .check (argv) ->
+    "Place command arguments after a --" if argv._.length isnt 0
 
 
 # Little trick to show invocation errors *before* the help message:
@@ -46,50 +47,27 @@ yargs.showHelp (help) ->
   yargs.showHelpOnFail false, help
 
 
-# Now. To have yargs support our syntax (all arguments after the first non-flag
-# non-flag-parameter are part of the command) we have to do some preprocessing.
-# Namely, splitting the arguments into flags and command by hand, then giving
-# yargs just the flags.
-
-# To be the first command argument, an argument has to:
-# 1. Not be a flag (begin with '-')
-# 2. Not be after a flag that takes a parameter (maybe with flag grouping)
-
-is_flag_or_parameter = (argv, i) ->
-  arg  = argv[i]
-  prev = argv[i - 1]
-
-  if arg[0] is '-'
-    return true
-
-  if not prev? or prev[0] isnt '-'
-    return false
-
-  return prev is '--watch' or prev[1] isnt '-' and 'w' in prev
-
-
-splitArgs = (argv) ->
-  # Find first non-flag, non-flag-parameter argument and split args in two
-
-  for arg, i in argv
-    if not is_flag_or_parameter argv, i
-      return [ argv[...i], argv[i..] ]
-
-  [ argv, [] ]
-
-
 ensureArray = (obj_or_array) ->
   if Array.isArray obj_or_array then obj_or_array else [obj_or_array]
   
 
-@parse = (argv) ->
-  [flags, command] = splitArgs argv[2..]
 
-  if not command.length
-    console.error "No command given\n"
+@parse = (argv) ->
+  # Remove ['node', 'redo.js']
+  argv = argv[2..]
+
+  # A -- separates our flags from the command. Find it:
+  separator = argv.indexOf '--'
+
+  if separator is -1
     yargs.showHelp()
     process.exit 1
 
+  # Cut flags from command:
+  flags   = argv[..separator - 1]
+  command = argv[separator + 1..]
+
+  # Parse flags and produce options:
   options = yargs.parse flags
 
   options.command = command

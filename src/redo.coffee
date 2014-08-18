@@ -39,7 +39,7 @@ respawn = ->
   else
     if options.kill
       debug "TERM"
-      subproc.kill()
+      subproc.kill 'SIGTERM'
 
     if options.Kill
       debug "KILL"
@@ -53,12 +53,17 @@ respawn = ->
 
 
 @main = (argv) ->
-  options = cli.parse argv
+  process.name = 'redo'
 
+  options = cli.parse argv
+  
   for path in options.watches
     try
+      debug "WATCH #{path}"
       watch.watch path, respawn
 
     catch e
       console.error "Can't watch #{path}: #{e.code}"
       process.exit 1
+
+  spawn()
