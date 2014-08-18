@@ -13,6 +13,7 @@ yargs = require 'yargs'
 
   .help  'help'
   .alias 'help', 'h'
+  .wrap 80
 
   .options 'watch',
     alias      : 'w'
@@ -23,7 +24,7 @@ yargs = require 'yargs'
 
   .options 'kill',
     alias   : 'k'
-    describe: "Terminate previous process before redoing"
+    describe: "Terminate previous process before redoing (waits by default)"
     boolean : true
 
   .options 'Kill',
