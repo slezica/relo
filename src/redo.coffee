@@ -12,7 +12,7 @@ subproc = null # will hold a ChildProcess object
 
 debug = (message) ->
   # These messages are picked up by the test suite
-  console.log message if process.env.NODE_DEBUG is 'true'
+  console.log message if process.env.DEBUG is 'true'
 
 
 spawn = ->
@@ -23,7 +23,7 @@ spawn = ->
     cwd  : process.cwd()
     stdio: 'inherit'
 
-  debug "SPAWN"
+  debug "SPAWN #{prog}"
 
   subproc.on 'exit', (status, signal) ->
     debug "EXIT"

@@ -3,24 +3,16 @@ fs = require 'fs'
 
 yargs = require 'yargs'
   .usage "
-    redo [-w file|dir]+ [-k] [-p] -- <command>+\n
-    Rerun command on file-system events
+    redo [file|dir]+ [-k] [-p] -- <command>+\n
+    Rerun or reload program on file-system events
   "
 
-  .example "$0 -w file -- make all", "Rerun make"
-  .example "$0 -w dir/ -k -- runserver", "Kill and restart server"
-  .example "$0 -w file -w dir/ -- cmd", "Multiple watches"
+  .example "$0 file1 file2 -- make all", "Rerun make"
+  .example "$0 -k dir/ -- runserver", "Kill and restart server"
 
   .help  'help'
   .alias 'help', 'h'
   .wrap 80
-
-  .options 'watch',
-    alias      : 'w'
-    describe   : "Watch given file or directory"
-    requiresArg: true
-    string     : true
-    demand     : true
 
   .options 'kill',
     alias   : 'k'
@@ -38,8 +30,9 @@ yargs = require 'yargs'
     boolean : true
 
   .strict() # no unknown flags accepted
+
   .check (argv) ->
-    "Place command arguments after a --" if argv._.length isnt 0
+    "No files watched" if argv._.length is 0
 
 
 # Little trick to show invocation errors *before* the help message:
@@ -56,21 +49,21 @@ ensureArray = (obj_or_array) ->
   # Remove ['node', 'redo.js']
   argv = argv[2..]
 
-  # A -- separates our flags from the command. Find it:
+  # A -- separates our arguments from the command. Find it:
   separator = argv.indexOf '--'
 
   if separator is -1
     yargs.showHelp()
     process.exit 1
 
-  # Cut flags from command:
-  flags   = argv[..separator - 1]
+  # Cut args from command:
+  args    = argv[..separator - 1]
   command = argv[separator + 1..]
 
-  # Parse flags and produce options:
-  options = yargs.parse flags
+  # Parse args and produce options:
+  options = yargs.parse args
 
   options.command = command
-  options.watches = ensureArray options.watch
+  options.watches = options._
 
   options

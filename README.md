@@ -5,13 +5,15 @@
 
 # Basic usage
 
-Start `redo` with a file to watch, followed by a command to run when it changes:
+Start `redo` with a file to watch, followed by a command to run when it changes.
+To avoid confusion between `redo` flags and the given command, a `--` separates
+them:
 
-    $ redo --watch file echo hello
+    $ redo file -- echo hello
 
 When `file` is modified, you'll see `hello` printed.
 
-You can set multiple watches by repeating the `--watch` (`-w`) argument.
+You can set multiple watches by passing multiple paths before the `--`.
 Directories are watched recursively.
 
 Note that near-simultaneous events will be grouped. `redo` won't trigger more
@@ -23,7 +25,7 @@ than once a second.
 By default, `redo` waits for the command to finish before running it again. You
 can instead terminate the running instance with `--kill` (`-k`):
 
-    $ redo --watch dir/ --kill runserver
+    $ redo --kill file -- runserver
 
 The `--Kill` (`-K`) flag uses `SIGKILL` instead of `SIGTERM`.
 
@@ -33,4 +35,7 @@ The `--Kill` (`-K`) flag uses `SIGKILL` instead of `SIGTERM`.
 With the `--parallel` (`-p`) flag, redo will neither kill nor wait for previous
 commands to finish.
 
-    $ redo --watch dir/ --parallel curl ...
+    $ redo --parallel file -- curl http://example.com
+
+In this example, `curl` instances spawned by `redo` are completely independent,
+and may run at the same time.
