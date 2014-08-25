@@ -7,8 +7,8 @@ yargs = require 'yargs'
     Rerun or reload program on file-system events
   "
 
-  .example "$0 file1 file2 -- make all", "Rerun make"
-  .example "$0 -k dir/ -- runserver", "Kill and restart server"
+  .example "redo file1 file2 -- make all", "Rerun make"
+  .example "redo -k dir/ -- runserver", "Kill and restart server"
 
   .help  'help'
   .alias 'help', 'h'
