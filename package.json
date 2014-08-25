@@ -1,6 +1,6 @@
 {
   "name": "redo",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "auto-reload or rerun programs on file-system events",
   "author": "Santiago Lezica <slezica89@gmail.com>",
   "license": "MIT",
