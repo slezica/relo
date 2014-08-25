@@ -3,12 +3,12 @@ fs = require 'fs'
 
 yargs = require 'yargs'
   .usage "
-    redo [file|dir]+ [-k] [-p] -- <command>+\n
+    relo [file|dir]+ [-k] [-p] -- <command>+\n
     Rerun or reload program on file-system events
   "
 
-  .example "redo file1 file2 -- make all", "Rerun make"
-  .example "redo -k dir/ -- runserver", "Kill and restart server"
+  .example "relo file1 file2 -- make all", "Rerun make"
+  .example "relo -k dir/ -- runserver", "Kill and restart server"
 
   .help  'help'
   .alias 'help', 'h'
@@ -16,7 +16,7 @@ yargs = require 'yargs'
 
   .options 'kill',
     alias   : 'k'
-    describe: "Terminate previous process before redoing (waits by default)"
+    describe: "Terminate previous process before running (waits by default)"
     boolean : true
 
   .options 'Kill',
@@ -46,7 +46,7 @@ ensureArray = (obj_or_array) ->
 
 
 @parse = (argv) ->
-  # Remove ['node', 'redo.js']
+  # Remove ['node', 'relo.js']
   argv = argv[2..]
 
   # A -- separates our arguments from the command. Find it:

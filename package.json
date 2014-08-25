@@ -1,17 +1,17 @@
 {
-  "name": "redo-cli",
+  "name": "relo",
   "version": "0.1.0",
   "description": "auto-reload or rerun programs on file-system events",
   "author": "Santiago Lezica <slezica89@gmail.com>",
   "license": "MIT",
-  "main": "lib/redo",
+  "main": "lib/relo",
   "preferGlobal": true,
   "files": [
     "lib",
     "bin"
   ],
   "bin": {
-    "redo": "bin/redo"
+    "relo": "bin/relo"
   },
   "repository": {
     "type": "git",

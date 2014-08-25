@@ -51,7 +51,7 @@ respawn = ->
 
 
 @main = (argv) ->
-  process.name = 'redo'
+  process.name = 'relo'
 
   options = cli.parse argv
   

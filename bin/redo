@@ -1,2 +1,0 @@
-#!/usr/bin/env node
-require('../lib/redo.js').main(process.argv);
