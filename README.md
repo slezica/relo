@@ -2,6 +2,7 @@
 
 `redo` automatically reruns or reloads programs when file-system events occur.
 
+    $ npm install -g redo-cli
 
 # Basic usage
 

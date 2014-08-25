@@ -1,5 +1,5 @@
 {
-  "name": "redo",
+  "name": "redo-cli",
   "version": "0.1.0",
   "description": "auto-reload or rerun programs on file-system events",
   "author": "Santiago Lezica <slezica89@gmail.com>",
