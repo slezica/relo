@@ -2,31 +2,27 @@ require('source-map-support').install()
 
 fs    = require 'fs'
 cp    = require 'child_process'
+debug = require('debug') 'relo'
 cli   = require './cli'
 watch = require './watch'
 
 
 options = null # will hold a command-line options object
 subproc = null # will hold a ChildProcess object
-
-
-debug = (message) ->
-  # These messages are picked up by the test suite
-  console.log message if process.env.DEBUG is 'true'
-
+program = null # will hold the name of the child program
 
 spawn = ->
-  prog = options.command[0]
-  argv = options.command[1..]
+  program = options.command[0]
+  argv    = options.command[1..]
 
-  subproc = cp.spawn prog, argv,
+  subproc = cp.spawn program, argv,
     cwd  : process.cwd()
     stdio: 'inherit'
 
-  debug "SPAWN #{prog}"
+  debug "Started #{program}"
 
   subproc.on 'exit', (status, signal) ->
-    debug "EXIT"
+    debug "#{program} exited"
     subproc = null
 
 
@@ -36,17 +32,16 @@ respawn = ->
 
   else
     if options.kill
-      debug "TERM"
+      debug "Terminating #{program}"
       subproc.kill 'SIGTERM'
 
     if options.Kill
-      debug "KILL"
+      debug "Killing #{program}"
       subproc.kill 'SIGKILL'
 
     if options.parallel
       spawn()
     else
-      debug "WAIT"
       subproc.on 'exit', spawn
 
 
@@ -54,14 +49,8 @@ respawn = ->
   process.name = 'relo'
 
   options = cli.parse argv
-  
-  for path in options.watches
-    try
-      debug "WATCH #{path}"
-      watch.watch path, respawn
 
-    catch e
-      console.error "Can't watch #{path}: #{e.code}"
-      process.exit 1
+  for path in options.watches
+    watch.watch path, respawn
 
   spawn()

@@ -1,6 +1,6 @@
 {
   "name": "relo",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "auto-reload or rerun programs on file-system events",
   "author": "Santiago Lezica <slezica89@gmail.com>",
   "license": "MIT",
@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "chokidar": "^0.8.4",
+    "debug": "^2.0.0",
     "source-map-support": "^0.2.7",
     "yargs": "^1.3.1"
   },
