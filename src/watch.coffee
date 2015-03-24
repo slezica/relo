@@ -12,6 +12,7 @@ CALLBACK_INTERVAL = 1000 # milliseconds
   watcher = chokidar.watch path, ignoreInitial: true
 
   watcher.on 'all', (event, filename) ->
+    debug "Event #{event} on #{filename}"
     events.push {event, filename}
 
   watcher.on 'error', (err) ->
