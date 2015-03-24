@@ -11,6 +11,7 @@ options = null # will hold a command-line options object
 subproc = null # will hold a ChildProcess object
 program = null # will hold the name of the child program
 
+
 spawn = ->
   program = options.command[0]
   argv    = options.command[1..]
@@ -27,11 +28,11 @@ spawn = ->
     subproc = null
 
 
-kill = (signal) ->
+kill = (signal = options.signal) ->
   if options.group
     debug "Sending #{signal} to group #{-subproc.pid}"
     process.kill -subproc.pid, signal
-    
+
   else
     debug "Sending #{signal} to #{program}"
     subproc.kill signal
@@ -42,12 +43,7 @@ respawn = ->
     spawn()
 
   else
-    signal = switch
-      when options.kill then 'SIGTERM'
-      when options.Kill then 'SIGKILL'
-
-    if signal
-      kill signal
+    kill() unless options.wait
 
     if options.parallel
       spawn()
@@ -66,8 +62,8 @@ respawn = ->
   spawn()
 
   process.on 'exit', (code, signal) ->
-    if subproc then kill signal ? 'SIGTERM'
+    if subproc then kill()
 
   process.on 'SIGINT', ->
-    if subproc then kill 'SIGINT'
+    if subproc then kill()
     process.exit()

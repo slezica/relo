@@ -1,5 +1,7 @@
 fs = require 'fs'
 
+SIGNALS = ['SIGHUP', 'SIGINT', 'SIGTERM', 'SIGKILL']
+
 
 yargs = require 'yargs'
   .usage "
@@ -14,30 +16,35 @@ yargs = require 'yargs'
   .alias 'help', 'h'
   .wrap 80
 
-  .options 'kill',
-    alias   : 'k'
-    describe: "Terminate previous process before running (waits by default)"
-    boolean : true
-
-  .options 'Kill',
-    alias   : 'K'
-    describe: "Like -k, but use SIGKILL"
-    boolean : true
+  .options 'signal',
+    alias   : 's'
+    describe: "Signal to send on reload (default: SIGINT)"
+    default : 'SIGINT'
+    nargs   : 1
 
   .options 'group',
     alias   : 'g'
-    describe: "Send killing signal to the process group"
+    describe: "Send signal to subprocess group"
+    boolean : true
+
+  .options 'wait',
+    alias   : 'w'
+    describe: "Do not signal on reload, wait for subprocess to finish normally"
     boolean : true
 
   .options 'parallel',
     alias   : 'p'
-    describe: "Redo command immediately, in parallel (waits by default)"
+    describe: "Rerun command immediately, in parallel (with our without signal)"
     boolean : true
 
   .strict() # no unknown flags accepted
 
   .check (argv) ->
     "No files watched" if argv._.length is 0
+
+  .check (argv) ->
+    if argv.signal.toUpperCase() not in SIGNALS
+      "'#{argv.signal}' is not a valid signal"
 
 
 # Little trick to show invocation errors *before* the help message:
@@ -70,5 +77,6 @@ ensureArray = (obj_or_array) ->
 
   options.command = command
   options.watches = options._
+  options.signal  = options.signal.toUpperCase()
 
-  options
+  return options
