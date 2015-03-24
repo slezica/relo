@@ -3,7 +3,7 @@ fs = require 'fs'
 
 yargs = require 'yargs'
   .usage "
-    relo [file|dir]+ [-k] [-p] -- <command>+\n
+    relo [file|dir]+ [-k|K] [-g] [-p] -- <command>+\n
     Rerun or reload program on file-system events
   "
 
@@ -22,6 +22,11 @@ yargs = require 'yargs'
   .options 'Kill',
     alias   : 'K'
     describe: "Like -k, but use SIGKILL"
+    boolean : true
+
+  .options 'group',
+    alias   : 'g'
+    describe: "Send killing signal to the process group"
     boolean : true
 
   .options 'parallel',

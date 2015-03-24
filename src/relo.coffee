@@ -16,8 +16,9 @@ spawn = ->
   argv    = options.command[1..]
 
   subproc = cp.spawn program, argv,
-    cwd  : process.cwd()
-    stdio: 'inherit'
+    cwd     : process.cwd()
+    stdio   : 'inherit'
+    detached: true
 
   debug "Started #{program}"
 
@@ -26,18 +27,27 @@ spawn = ->
     subproc = null
 
 
+kill = (signal) ->
+  if options.group
+    debug "Sending #{signal} to group #{-subproc.pid}"
+    process.kill -subproc.pid, signal
+    
+  else
+    debug "Sending #{signal} to #{program}"
+    subproc.kill signal
+
+
 respawn = ->
   if not subproc?
     spawn()
 
   else
-    if options.kill
-      debug "Terminating #{program}"
-      subproc.kill 'SIGTERM'
+    signal = switch
+      when options.kill then 'SIGTERM'
+      when options.Kill then 'SIGKILL'
 
-    if options.Kill
-      debug "Killing #{program}"
-      subproc.kill 'SIGKILL'
+    if signal
+      kill signal
 
     if options.parallel
       spawn()
@@ -54,3 +64,10 @@ respawn = ->
     watch.watch path, respawn
 
   spawn()
+
+  process.on 'exit', (code, signal) ->
+    if subproc then kill signal ? 'SIGTERM'
+
+  process.on 'SIGINT', ->
+    if subproc then kill 'SIGINT'
+    process.exit()

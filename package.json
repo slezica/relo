@@ -1,6 +1,6 @@
 {
   "name": "relo",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "auto-reload or rerun programs on file-system events",
   "author": "Santiago Lezica <slezica89@gmail.com>",
   "license": "MIT",
