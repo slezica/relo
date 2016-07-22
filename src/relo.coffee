@@ -16,12 +16,16 @@ spawn = ->
   program = options.command[0]
   argv    = options.command[1..]
 
+  if ! argv.length && program.search(' ') != -1
+    [program, argv...] = program.split(' ')
+
   subproc = cp.spawn program, argv,
     cwd     : process.cwd()
-    stdio   : 'inherit'
     detached: true
 
   debug "Started #{program}"
+
+  subproc.stdout.on 'data', (buffer) -> console.log(buffer.toString().trim())
 
   subproc.on 'exit', (status, signal) ->
     debug "#{program} exited"
