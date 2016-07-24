@@ -1,11 +1,16 @@
 {
   "name": "relo",
   "version": "0.4.0",
-  "description": "auto-reload or rerun programs on file-system events",
+  "description": "Auto-reload or rerun programs on file-system events",
   "author": "Santiago Lezica <slezica89@gmail.com>",
   "license": "MIT",
   "main": "lib/relo",
   "preferGlobal": true,
+  "scripts": {
+    "build": "babel src2 --out-dir dist",
+    "watch": "babel src2 --out-dir dist --watch",
+    "test": "mocha --compilers js:babel-register test/"
+  },
   "files": [
     "lib",
     "bin"
@@ -24,6 +29,15 @@
     "yargs": "^1.3.1"
   },
   "devDependencies": {
-    "coffee-script": "^1.7.0"
+    "babel-cli": "^6.11.4",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-register": "^6.11.5",
+    "coffee-script": "^1.7.0",
+    "mocha": "^2.5.3"
+  },
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
   }
 }
