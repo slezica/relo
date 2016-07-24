@@ -38,8 +38,8 @@ function wrapCallback(callback) {
   // `chokidar` will report every event separately, but we'd like to invoke
   // our `callback` only when file changes have "settled".
 
-  // We'll notify our listener when `CALLBACK_WAIT_MS` have passed with no new
-  // events being reported, but never more than `CALLBACK_WAIT_MAX_MS`: if
+  // We'll notify our listener after `CALLBACK_WAIT_MS` have passed with no new
+  // events being reported, but never wait more than `CALLBACK_WAIT_MAX_MS`: if
   // it takes too long, we'll just have to risk invoking `callback` multiple
   // times.
 
