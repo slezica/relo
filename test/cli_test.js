@@ -6,7 +6,7 @@ import { NoCommandGiven, NoWatchesGiven, InvalidSignalGiven } from '../src2/erro
 
 describe("The CLI parser", function() {
 
-  it("should identify the command to run", function() {
+  it("should identify the command and its arguments", function() {
     const options = parse('file -- cmd arg1 arg2')
     expect(options.command).to.deep.equal([ 'cmd', 'arg1', 'arg2' ])
   })
