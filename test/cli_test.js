@@ -29,21 +29,6 @@ describe("The CLI parser", function() {
   })
 
 
-  it("should handle the -g and --group flags", function() {
-    let options = parse('file -- cmd')
-    expect(options.g).to.be.false
-    expect(options.group).to.be.false
-
-    options = parse('file -g -- cmd')
-    expect(options.g).to.be.true
-    expect(options.group).to.be.true
-
-    options = parse('file --group -- cmd')
-    expect(options.g).to.be.true
-    expect(options.group).to.be.true
-  })
-
-
   describeBooleanFlag('w', 'wait')
   describeBooleanFlag('g', 'group')
   describeBooleanFlag('p', 'parallel')
