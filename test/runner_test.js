@@ -78,11 +78,13 @@ describe("The process Runner", function() {
       let runner
 
       runner = new MockRunner({ group: true })
+      runner.spawn()
       runner.kill()
       expect(runner.killGroup).called
       expect(runner.killSingle).notCalled
 
       runner = new MockRunner({ group: false })
+      runner.spawn()
       runner.kill()
       expect(runner.killGroup).notCalled
       expect(runner.killSingle).called

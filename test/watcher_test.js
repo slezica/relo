@@ -8,7 +8,7 @@ import { mkdtempSync, openSync, closeSync, mkdirSync } from 'fs'
 import touch from 'touch'
 import rmRf from 'rimraf'
 
-import watcher from '../src2/watcher'
+import watcher from '../src/watcher'
 
 
 describe("The file watcher", function() {

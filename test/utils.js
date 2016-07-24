@@ -1,6 +1,6 @@
 import sinon from 'sinon'
 
-import { Runner } from '../src2/runner'
+import { Runner } from '../src/runner'
 
 
 export function mockRunnerClass(...spyList) {

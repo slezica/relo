@@ -1,7 +1,7 @@
 import chai, { expect } from 'chai'
 
-import cli from '../src2/cli'
-import { NoCommandGiven, NoWatchesGiven, InvalidSignalGiven } from '../src2/errors'
+import cli from '../src/cli'
+import { NoCommandGiven, NoWatchesGiven, InvalidSignalGiven } from '../src/errors'
 
 
 describe("The CLI parser", function() {
