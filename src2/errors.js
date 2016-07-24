@@ -14,7 +14,9 @@ class BaseError {
 
 export class NoCommandGiven extends BaseError {}
 
+
 export class NoWatchesGiven extends BaseError {}
+
 
 export class InvalidSignalGiven extends BaseError {
   constructor(signal) {
