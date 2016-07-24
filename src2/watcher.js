@@ -43,11 +43,10 @@ function wrapCallback(callback) {
   // it takes too long, we'll just have to risk invoking `callback` multiple
   // times.
 
-  // Note that we don't pass parameters to `callback`. Just knowing that
-  // something happened is enough for now, so we can safely ignore individual
-  // event information.
+  // Note that we don't pass event info to `callback`. Just knowing that
+  // something happened is enough for now.
   const onEvent = (event, path) => {
-    callback()
+    callback(null)
   }
 
   return debounce(onEvent, CALLBACK_WAIT_MS, {

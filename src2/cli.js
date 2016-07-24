@@ -13,7 +13,7 @@ const cli = yargs
   `)
 
   .example("relo file1 file2 -- make all", "Rerun make")
-  .example("relo -k dir/ -- runserver", "Kill and restart server")
+  .example("relo -g dir/ -- runserver", "Kill and restart server")
 
   .help('help')
   .alias('help', 'h')

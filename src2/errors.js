@@ -1,7 +1,7 @@
 
 class BaseError {
-  constructor() {
-    this.message = this.constructor.name
+  constructor(...args) {
+    this.message = this.fmtMessage(...args)
     this.name = this.constructor.name
     Error.captureStackTrace(this, this.constructor)
   }
@@ -12,16 +12,22 @@ class BaseError {
 }
 
 
-export class NoCommandGiven extends BaseError {}
+export class NoCommandGiven extends BaseError {
+  fmtMessage() {
+    return "No command was given to run"
+  }
+}
 
 
-export class NoWatchesGiven extends BaseError {}
+export class NoWatchesGiven extends BaseError {
+  fmtMessage() {
+    return "No files were given to watch"
+  }
+}
 
 
 export class InvalidSignalGiven extends BaseError {
-  constructor(signal) {
-    super()
-    this.signal = signal
-    this.message = `InvalidSignalGiven: ${signal}`
+  fmtMessage(signal) {
+    return `Invalid signal: ${signal} (must be SIGHUP, SIGINT, SIGTERM or SIGKILL)`
   }
 }

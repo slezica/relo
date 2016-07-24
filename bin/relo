@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require('../lib/relo.js').main(process.argv);
+require('../dist/main.js').main(process.argv);
