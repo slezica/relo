@@ -12,7 +12,7 @@
     "test": "mocha --compilers js:babel-register test/"
   },
   "files": [
-    "lib",
+    "dist",
     "bin"
   ],
   "bin": {
