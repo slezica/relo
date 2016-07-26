@@ -90,11 +90,11 @@ function waitWatcher(watcher) {
 }
 
 function wait() {
-  return sleep(watcher.CALLBACK_WAIT_MS + 10)
+  return sleep(watcher.CALLBACK_WAIT_MS + 200)
 }
 
 function waitTooMuch() {
-  return sleep(watcher.CALLBACK_WAIT_MAX_MS + 10)
+  return sleep(watcher.CALLBACK_WAIT_MAX_MS + 200)
 }
 
 function sleep(ms) {
