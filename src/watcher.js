@@ -3,7 +3,7 @@ import chokidar from 'chokidar'
 import debounce from 'lodash.debounce'
 
 
-export const CALLBACK_WAIT_MS = 100
+export const CALLBACK_WAIT_MS = 200
 export const CALLBACK_WAIT_MAX_MS = 1000
 
 let watcher
