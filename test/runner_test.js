@@ -32,7 +32,7 @@ describe("The process Runner", function() {
 
   describe("#respawn", function() {
     const MockRunner = mockRunnerClass('spawn', 'kill')
-
+    
     it("should call spawn() if no process is running", function() {
       const runner = new MockRunner()
       runner.respawn()
@@ -45,7 +45,7 @@ describe("The process Runner", function() {
       runner = new MockRunner({ wait: true })
       runner.spawn()
       runner.respawn()
-      expect(runner.kill).notCalled
+      expect(runner.kill).not.called
       
       runner = new MockRunner({ wait: false })
       runner.spawn()
@@ -57,14 +57,18 @@ describe("The process Runner", function() {
       let runner
 
       runner = new MockRunner({ parallel: true })
+      runner.spawn.resetHistory()
       runner.spawn()
       runner.respawn()
-      expect(runner.spawn).called
+      expect(runner.spawn).calledTwice
 
+      runner.spawn.resetHistory()
+      
       runner = new MockRunner({ parallel: false })
       runner.spawn()
       runner.respawn()
-      expect(runner.spawn).notCalled
+
+      expect(runner.spawn).calledOnce
       expect(runner.process.on).calledTwice
       expect(runner.process.on.alwaysCalledWith('exit')).to.be.true
     })
@@ -81,12 +85,15 @@ describe("The process Runner", function() {
       runner.spawn()
       runner.kill()
       expect(runner.killGroup).called
-      expect(runner.killSingle).notCalled
+      expect(runner.killSingle).not.called
+
+      runner.killGroup.resetHistory()
+      runner.killSingle.resetHistory()
 
       runner = new MockRunner({ group: false })
       runner.spawn()
       runner.kill()
-      expect(runner.killGroup).notCalled
+      expect(runner.killGroup).not.called
       expect(runner.killSingle).called
     })
   })

@@ -1,6 +1,7 @@
 
-class BaseError {
+class BaseError extends Error {
   constructor(...args) {
+    super()
     this.message = this.fmtMessage(...args)
     this.name = this.constructor.name
     Error.captureStackTrace(this, this.constructor)
